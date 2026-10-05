@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Ad Blocker Detector</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #111;
+            color: white;
+        }
+
+        .content {
+            text-align: center;
+            padding: 100px 20px;
+        }
+
+        .content h1 {
+            font-size: 40px;
+        }
+
+        /* Fake advertisement */
+        .ad-banner {
+            width: 728px;
+            height: 90px;
+            margin: 40px auto;
+            background: #222;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #888;
+        }
+
+        /* Popup background */
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.92);
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            z-index: 999999;
+        }
+
+        /* Popup */
+        .popup {
+            width: 350px;
+            padding: 30px;
+
+            background: white;
+            color: black;
+
+            border-radius: 15px;
+            text-align: center;
+
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .popup h2 {
+            margin-top: 0;
+        }
+
+        .popup p {
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="content">
+        <h1>My Website</h1>
+
+        <p>
+            Welcome to my website!
+        </p>
+
+        <!-- This is what the detector checks -->
+        <div class="ad-banner">
+            Advertisement
+        </div>
+
+        <p>
+            Website content goes here.
+        </p>
+    </div>
+
+
+    <script>
+        /*
+            Ad Blocker Detector
+        */
+
+        function checkAdBlocker() {
+
+            const ad = document.querySelector(".ad-banner");
+
+            /*
+                If an ad blocker hides the element,
+                its dimensions may become 0.
+            */
+
+            if (
+                ad.offsetWidth === 0 ||
+                ad.offsetHeight === 0
+            ) {
+                showPopup();
+            }
+        }
+
+
+        function showPopup() {
+
+            // Create dark background
+            const overlay = document.createElement("div");
+
+            overlay.className = "overlay";
+
+
+            // Create popup
+            const popup = document.createElement("div");
+
+            popup.className = "popup";
+
+
+            // Popup content
+            popup.innerHTML = `
+                <h2>Ad Blocker Detected</h2>
+
+                <p>
+                    Please disable your ad blocker
+                    and refresh the page.
+                </p>
+            `;
+
+
+            // Put popup inside overlay
+            overlay.appendChild(popup);
+
+            // Put overlay on the page
+            document.body.appendChild(overlay);
+        }
+
+
+        /*
+            Wait until the page has loaded,
+            then check the advertisement.
+        */
+
+        window.addEventListener("load", () => {
+
+            setTimeout(() => {
+                checkAdBlocker();
+            }, 100);
+
+        });
+    </script>
+
+</body>
+</html>
